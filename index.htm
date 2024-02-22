@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="p-4">
+
+  <div id="products-table"></div>
+
+  <script>
+
+    const API_URL = 'https://dummyjson.com/products';
+
+    async function fetchProducts() {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        
+        // Get all products
+        const products = data.products;
+        
+        const tableHtml = generateProductsTable(products);
+
+        document.getElementById('products-table').innerHTML = tableHtml;
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function generateProductsTable(products) {
+      
+      let rows = '';
+      let i = 1;
+
+      products.forEach(product => {
+        if (i > 30) return; // only get 30 products
+        
+        rows += `
+          <tr class="border-b">
+            <td class="px-4 py-2">${i++}</td>
+            <td class="px-4 py-2">${product.title}</td>
+            <td class="px-4 py-2">${product.brand}</td>
+            <td class="px-4 py-2">$${product.price}</td>  
+<td>${product.description}</td>  
+          </tr>
+        `;
+      });
+
+      return `
+        <table class="table-auto border-collapse w-full">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="px-4 py-2 border">#</th>
+              <th class="px-4 py-2 border">Name</th>
+              <th class="px-4 py-2 border">Brand</th>
+              <th class="px-4 py-2 border">Price</th>   
+              <th class="px-4 py-2 border">Description</th>
+            </tr>
+          </thead>  
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      `;
+
+    }
+
+    fetchProducts();
+
+  </script>
+
+</body>
+</html>
